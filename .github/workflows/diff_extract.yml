@@ -1,43 +1,42 @@
-# This is a basic workflow to help you get started with Actions
-
 name: Diff extract
 
-
+# This is a basic workflow to help you get started with Actions
 on:
   pull_request:
-    branches: [ "main" ]
+    branches: 
+      - "main"
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "build"
   build:
     runs-on: ubuntu-latest 
-
+    
     steps:
       # 1. Checkout the code of the pull request
       - name: Checkout code
         uses: actions/checkout@v3
-
+      
       - name: Find all .strings files and generate diffs
-      run: |
-        # Create a directory to store the diff files
-        mkdir -p diff_files
-
-        # Find all .strings files in the repository
-        for file in $(find . -name "*.strings"); do
-          # Create a variable for the original file path
-          original_file="$file"
-
-          # Create a variable for the corresponding PR file
-          pr_file="${file}"
-
-          # Define a diff output file based on the original file's name
-          diff_output="diff_files/$(basename $file .strings)_diff.txt"
-
-          # Generate the diff and save it to the diff_output file
-          diff $original_file $pr_file > $diff_output || true
-        done
-
+        run: |
+          # Create a directory to store the diff files
+          mkdir -p diff_files
+          
+          # Find all .strings files in the repository
+          for file in $(find . -name "*.strings"); do
+            # Create a variable for the original file path
+            original_file="$file"
+            
+            # Create a variable for the corresponding PR file
+            pr_file="${file}"
+            
+            # Define a diff output file based on the original file's name
+            diff_output="diff_files/$(basename $file .strings)_diff.txt"
+            
+            # Generate the diff and save it to the diff_output file
+            diff $original_file $pr_file > $diff_output || true
+          done
+      
       - name: Upload diff files as artifact
         uses: actions/upload-artifact@v2
         with:
