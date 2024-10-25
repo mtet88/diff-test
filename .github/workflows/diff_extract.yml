@@ -17,29 +17,29 @@ jobs:
       # 1. Checkout the code of the pull request
       - name: Checkout code
         uses: actions/checkout@v3
+
+      - name: Find all .strings files and generate diffs
+      run: |
+        # Create a directory to store the diff files
+        mkdir -p diff_files
+
+        # Find all .strings files in the repository
+        for file in $(find . -name "*.strings"); do
+          # Create a variable for the original file path
+          original_file="$file"
+
+          # Create a variable for the corresponding PR file
+          pr_file="${file}"
+
+          # Define a diff output file based on the original file's name
+          diff_output="diff_files/$(basename $file .strings)_diff.txt"
+
+          # Generate the diff and save it to the diff_output file
+          diff $original_file $pr_file > $diff_output || true
+        done
+
+      - name: Upload diff files as artifact
+        uses: actions/upload-artifact@v2
         with:
-          ref: ${{ github.event.pull_request.head.ref }}
-
-      # 2. Compare the files and generate the diffs
-      - name: Compare files and generate result
-        run: |
-          # Create a directory for the expected results
-          mkdir diffs
-
-          # Compare the files and apply changes
-          for file in original files/*.strings; do
-            base_name=$(basename "$file")
-
-            # Diff the original file and the modified file in the PR
-            diff -u "original files/$base_name" "modified files/$base_name" > diff_output.patch
-
-            # Apply the patch to the original file to create the expected result
-            patch "original files/$base_name" diff_output.patch -o "diffs/$base_name"
-          done
-
-      # 3. Upload the expected result as an artifact
-      - name: Upload expected result
-        uses: actions/upload-artifact@v3
-        with:
-          name: expected-result
-          path: diffs/
+          name: strings-diff
+          path: diff_files/
