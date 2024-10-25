@@ -5,37 +5,35 @@ on:
     branches: 
       - "main"
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
   build:
     runs-on: ubuntu-latest 
     
     steps:
-      # 1. Checkout the code of the pull request
+      # 1. Checkout del código de la pull request
       - name: Checkout code
         uses: actions/checkout@v3
       
-      - name: Find all .strings files and generate diffs
+      # 2. Obtener la última versión de la rama main
+      - name: Fetch main branch
+        run: git fetch origin main
+
+      # 3. Encontrar los archivos .strings que han cambiado y generar diffs
+      - name: Find changed .strings files and generate diffs
         run: |
-          # Create a directory to store the diff files
+          # Crear un directorio para almacenar los archivos diff
           mkdir -p diff_files
           
-          # Find all .strings files in the repository
-          for file in $(find . -name "*.strings"); do
-            # Create a variable for the original file path
-            original_file="$file"
-            
-            # Create a variable for the corresponding PR file
-            pr_file="${file}"
-            
-            # Define a diff output file based on the original file's name
+          # Encontrar todos los archivos .strings que han cambiado en la PR
+          for file in $(git diff --name-only origin/main...HEAD -- '*.strings'); do
+            # Definir el nombre del archivo de salida diff
             diff_output="diff_files/$(basename $file .strings)_diff.txt"
             
-            # Generate the diff and save it to the diff_output file
-            diff $original_file $pr_file > $diff_output || true
+            # Generar el diff y guardarlo en diff_output
+            git diff origin/main...HEAD -- $file > $diff_output || true
           done
       
+      # 4. Subir los archivos diff como artefacto
       - name: Upload diff files as artifact
         uses: actions/upload-artifact@v3
         with:
