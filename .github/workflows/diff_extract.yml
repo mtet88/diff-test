@@ -25,7 +25,7 @@ jobs:
           grep -E 'diff --git.*\.strings' -A 10000 pr-diff.txt | grep -E 'diff --git|^$' -B 10000 > pr-diff-strings.txt
 
       - name: Upload diff artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: pr-diff-strings
           path: pr-diff-strings.txt
