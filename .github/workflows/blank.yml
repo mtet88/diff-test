@@ -1,0 +1,31 @@
+# This is a basic workflow to help you get started with Actions
+
+name: Diff extract
+
+
+on:
+  pull_request:
+    branches: [ "main" ]
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    runs-on: ubuntu-latest 
+
+    steps:
+      - name: Get PR Diff via API
+        run: |
+          curl -H "Accept: application/vnd.github.v3.diff" \
+               -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+               https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }} > pr-diff.txt
+
+      - name: Filter diff for .js files
+        run: |
+          grep -E 'diff --git.*\.js' -A 10000 pr-diff.txt | grep -E 'diff --git|^$' -B 10000 > pr-diff-js.txt
+
+      - name: Upload diff artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: pr-diff-js
+          path: pr-diff-js.txt
