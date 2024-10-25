@@ -22,14 +22,17 @@ jobs:
         if: false  # Puedes eliminar este paso si no es necesario
         run: git fetch origin main
 
-      # 3. Encontrar los archivos .strings que han cambiado y generar diffs
+      # 3. # Encontrar los archivos .strings que han cambiado y generar diffs
       - name: Find changed .strings files and generate diffs
         run: |
           mkdir -p diff_files
           
           git diff --name-only origin/main...HEAD -- '*.strings' | while IFS= read -r file; do
             diff_output="diff_files/$(basename "$file" .strings)_diff.txt"
-            git diff origin/main...HEAD -- "$file" > "$diff_output" || true
+            # Usar git diff con opciones para mostrar solo las líneas añadidas
+            git diff origin/main...HEAD -- "$file" | grep '^\+' | grep -v '^\+\+\+ b/' > "$diff_output" || true
+            # Eliminar el prefijo '+' de las líneas
+            sed -i 's/^\+//' "$diff_output"
           done
       
       # 4. Subir los archivos diff como artefacto
