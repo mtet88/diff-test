@@ -20,12 +20,12 @@ jobs:
                -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
                https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }} > pr-diff.txt
 
-      - name: Filter diff for .js files
+      - name: Filter diff for .strings files
         run: |
-          grep -E 'diff --git.*\.js' -A 10000 pr-diff.txt | grep -E 'diff --git|^$' -B 10000 > pr-diff-js.txt
+          grep -E 'diff --git.*\.strings' -A 10000 pr-diff.txt | grep -E 'diff --git|^$' -B 10000 > pr-diff-strings.txt
 
       - name: Upload diff artifact
         uses: actions/upload-artifact@v3
         with:
-          name: pr-diff-js
-          path: pr-diff-js.txt
+          name: pr-diff-strings
+          path: pr-diff-strings.txt
