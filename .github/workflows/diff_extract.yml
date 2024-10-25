@@ -14,18 +14,32 @@ jobs:
     runs-on: ubuntu-latest 
 
     steps:
-      - name: Get PR Diff via API
-        run: |
-          curl -H "Accept: application/vnd.github.v3.diff" \
-               -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-               https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }} > pr-diff.txt
-
-      - name: Filter diff for .strings files
-        run: |
-          grep -E 'diff --git.*\.strings' -A 10000 pr-diff.txt | grep -E 'diff --git|^$' -B 10000 > pr-diff-strings.txt
-
-      - name: Upload diff artifact
-        uses: actions/upload-artifact@v4
+      # 1. Checkout the code of the pull request
+      - name: Checkout code
+        uses: actions/checkout@v3
         with:
-          name: pr-diff-strings
-          path: pr-diff-strings.txt
+          ref: ${{ github.event.pull_request.head.ref }}
+
+      # 2. Compare the files and generate the diffs
+      - name: Compare files and generate result
+        run: |
+          # Create a directory for the expected results
+          mkdir diffs
+
+          # Compare the files and apply changes
+          for file in original files/*.strings; do
+            base_name=$(basename "$file")
+
+            # Diff the original file and the modified file in the PR
+            diff -u "original files/$base_name" "modified files/$base_name" > diff_output.patch
+
+            # Apply the patch to the original file to create the expected result
+            patch "original files/$base_name" diff_output.patch -o "diffs/$base_name"
+          done
+
+      # 3. Upload the expected result as an artifact
+      - name: Upload expected result
+        uses: actions/upload-artifact@v3
+        with:
+          name: expected-result
+          path: diffs/
