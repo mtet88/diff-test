@@ -5,37 +5,36 @@ on:
     branches: 
       - "main"
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
   build:
     runs-on: ubuntu-latest 
     
     steps:
-      # 1. Checkout the code of the pull request
+      # 1. Checkout del código de la pull request con todo el historial
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       
-      - name: Find all .strings files and generate diffs
+      # 2. (Opcional) Actualizar la rama main desde el origen
+      - name: Fetch main branch
+        if: false  # Puedes eliminar este paso si no es necesario
+        run: git fetch origin main
+
+      # 3. # Encontrar los archivos .strings que han cambiado y generar diffs
+      - name: Find changed .strings files and generate diffs
         run: |
-          # Create a directory to store the diff files
           mkdir -p diff_files
           
-          # Find all .strings files in the repository
-          for file in $(find . -name "*.strings"); do
-            # Create a variable for the original file path
-            original_file="$file"
-            
-            # Create a variable for the corresponding PR file
-            pr_file="${file}"
-            
-            # Define a diff output file based on the original file's name
-            diff_output="diff_files/$(basename $file .strings)_diff.txt"
-            
-            # Generate the diff and save it to the diff_output file
-            diff $original_file $pr_file > $diff_output || true
+          git diff --name-only origin/main...HEAD -- '*.strings' | while IFS= read -r file; do
+            diff_output="diff_files/$(basename "$file" .strings)_diff.txt"
+            # Usar git diff con opciones para mostrar solo las líneas añadidas
+            git diff origin/main...HEAD -- "$file" | grep '^\+' | grep -v '^\+\+\+ b/' > "$diff_output" || true
+            # Eliminar el prefijo '+' de las líneas
+            sed -i 's/^\+//' "$diff_output"
           done
       
+      # 4. Subir los archivos diff como artefacto
       - name: Upload diff files as artifact
         uses: actions/upload-artifact@v4
         with:
