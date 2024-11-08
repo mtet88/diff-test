@@ -11,8 +11,14 @@ def main():
         num2 = float(sys.argv[2])
         total = num1 + num2
         # Write the result directly to the GITHUB_OUTPUT environment file
-        with open(os.getenv('GITHUB_OUTPUT'), 'a') as github_output:
-            github_output.write(f"total={total}\n")
+        github_output_path = os.getenv('GITHUB_OUTPUT')
+
+        if github_output_path:
+            with open(github_output_path, 'a') as github_output:
+                github_output.write(f"total={total}\n")
+        else:
+            print("::error::GITHUB_OUTPUT environment variable not found.")
+            sys.exit(1)
     except ValueError:
         print("::error::Inputs must be valid numbers.")
         sys.exit(1)
