@@ -1,18 +1,18 @@
-import argparse
 import sys
 import os
 
 from gpt4all import GPT4All
 
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Ask like a tweet")
-    parser.add_argument('prompt', type=str, help='Prompt')
-    args = parser.parse_args()
+def main():
+
+    if len(sys.argv) != 2:
+        print("::error::One argument is required.")
+        sys.exit(1)
 
     model = GPT4All(model_name="Meta-Llama-3-8B-Instruct.Q4_0.gguf", model_path="../LLM/", allow_download=True)
 
     response = model.generate(
-        prompt=args.prompt,
+        prompt=sys.argv[1],
         max_tokens=280,
         temp=0.2,         # Lower temperature for more deterministic output
         top_k=5,                 # Narrow down the token selection
@@ -24,3 +24,6 @@ if __name__ == "__main__":
     print(response)
 
     sys.exit(0)    
+
+if __name__ == "__main__":
+    main()
