@@ -10,14 +10,21 @@ def main():
         num1 = float(sys.argv[1])
         num2 = float(sys.argv[2])
         total = num1 + num2
-        set_output(total, 'total')
+
+        # Check if GITHUB_OUTPUT is available
+        github_output_path = os.getenv('GITHUB_OUTPUT')
+        print(f"GITHUB_OUTPUT path: {github_output_path}")
+
+        if github_output_path:
+            # Write to GITHUB_OUTPUT if the path exists
+            with open(github_output_path, 'a') as github_output:
+                github_output.write(f"total={total}\n")
+        else:
+            print("::error::GITHUB_OUTPUT environment variable not found.")
+            sys.exit(1)
     except ValueError:
         print("::error::Inputs must be valid numbers.")
         sys.exit(1)
-
-def set_output(name, value):
-    with open(os.environ['GITHUB_OUTPUT'], 'a') as fh:
-        print(f'{name}={value}', file=fh)
 
 if __name__ == "__main__":
     main()
