@@ -13,7 +13,7 @@ on:
         default: '6'
 
 jobs:
-  sumar_numeros_job:
+  add_numbers_job:
     runs-on: ubuntu-latest
     steps:
       - name: Code checkout
