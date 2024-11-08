@@ -26,8 +26,8 @@ jobs:
           num1: ${{ github.event.inputs.num1 }}
           num2: ${{ github.event.inputs.num2 }}
 
-      # Debugging step to check if total is written to GITHUB_OUTPUT
       - name: Debug GITHUB_OUTPUT
         run: cat $GITHUB_OUTPUT || echo "GITHUB_OUTPUT not found"
+
       - name: Show result
         run: echo "The addition is ${{ steps.step_add.outputs.total }}"
