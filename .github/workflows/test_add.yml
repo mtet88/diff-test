@@ -1,0 +1,30 @@
+name: 'Test add'
+
+on:
+  workflow_dispatch:
+    inputs:
+      num1:
+        description: 'First number'
+        required: true
+        default: '4'
+      num2:
+        description: 'Second number'
+        required: true
+        default: '6'
+
+jobs:
+  sumar_numeros_job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Code checkout
+        uses: actions/checkout@v3
+
+      - name: Add two numbers
+        id: step_add
+        uses: ./.github/actions/add_numbers
+        with:
+          num1: ${{ github.event.inputs.num1 }}
+          num2: ${{ github.event.inputs.num2 }}
+
+      - name: Show result
+        run: echo "The addition is ${{ steps.step_add.outputs.total }}"
