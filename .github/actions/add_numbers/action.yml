@@ -15,4 +15,4 @@ runs:
   steps:
     - name: Execute addition script
       shell: bash
-      run: python scripts/suma.py "${{ inputs.num1 }}" "${{ inputs.num2 }}"
+      run: python scripts/add.py "${{ inputs.num1 }}" "${{ inputs.num2 }}"
