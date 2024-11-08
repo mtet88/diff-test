@@ -9,7 +9,7 @@ if __name__ == "__main__":
     parser.add_argument('prompt', type=str, help='Prompt')
     args = parser.parse_args()
 
-    model = GPT4All(model_name="Meta-Llama-3-8B-Instruct.Q4_0.gguf", model_path="../LLM/", allow_download=False)
+    model = GPT4All(model_name="Meta-Llama-3-8B-Instruct.Q4_0.gguf", model_path="../LLM/", allow_download=True)
 
     response = model.generate(
         prompt=args.prompt,
