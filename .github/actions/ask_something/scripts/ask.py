@@ -8,9 +8,11 @@ def main():
         print("::error::One argument is required.")
         sys.exit(1)
 
-    model = GPT4All(model_name="Meta-Llama-3-8B-Instruct.Q4_0.gguf", model_path="../LLM/", allow_download=True)
-
     prompt = str(sys.argv[1])
+    model_path = str(sys.argv[1])
+
+    model = GPT4All(model_name="Meta-Llama-3-8B-Instruct.Q4_0.gguf", model_path=model_path, allow_download=True)
+
     response = model.generate(
         prompt=prompt,
         max_tokens=280,
