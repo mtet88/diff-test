@@ -6,11 +6,11 @@ on:
       num1:
         description: 'First number'
         required: true
-        default: '4'
+        default: '40'
       num2:
         description: 'Second number'
         required: true
-        default: '6'
+        default: '60'
 
 jobs:
   add_numbers_job:
@@ -25,6 +25,9 @@ jobs:
         with:
           num1: ${{ github.event.inputs.num1 }}
           num2: ${{ github.event.inputs.num2 }}
+
+      - name: Manual write to GITHUB_OUTPUT
+        run: echo "manual_test=success" >> $GITHUB_OUTPUT
 
       - name: Debug GITHUB_OUTPUT
         run: cat $GITHUB_OUTPUT || echo "GITHUB_OUTPUT not found"
