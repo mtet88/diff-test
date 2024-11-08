@@ -1,4 +1,5 @@
 import sys
+import os
 
 def main():
     if len(sys.argv) != 3:
@@ -9,8 +10,9 @@ def main():
         num1 = float(sys.argv[1])
         num2 = float(sys.argv[2])
         total = num1 + num2
-        # Using echo to append to GITHUB_OUTPUT
-        print(f"echo 'total={total}' >> $GITHUB_OUTPUT")
+        # Write the output directly to the GITHUB_OUTPUT file
+        with open(os.environ['GITHUB_OUTPUT'], 'a') as output_file:
+            print(f"total={total}", file=output_file)
     except ValueError:
         print("::error::Inputs must be valid numbers.")
         sys.exit(1)
