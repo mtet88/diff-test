@@ -28,7 +28,7 @@ jobs:
 
       - name: Manual write to step output
         id: manual_step
-        run: echo "manual_test=success" >> $GITHUB_STEP_OUTPUT
+        run: echo '"manual_test=success" >> $GITHUB_STEP_OUTPUT'
 
       - name: Show manual output
         run: echo "Manual test output: ${{ steps.manual_step.outputs.manual_test }}"
