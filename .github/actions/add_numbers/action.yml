@@ -10,11 +10,13 @@ inputs:
 outputs:
   total:
     description: 'The total of the addition'
+    value: ${{ steps.addition.outputs.total }}
 runs:
   using: 'composite'
   steps:
     - name: Execute addition script
+      id: addition
       shell: bash
       run: |
         total=$(python ${{ github.action_path }}/scripts/add.py ${{ inputs.num1 }} ${{ inputs.num2 }})
-        echo "total=$total" >> $GITHUB_OUTPUT
+        echo "total=$total" >> $GITHUB_STEP_OUTPUTS

@@ -6,11 +6,11 @@ on:
       num1:
         description: 'First number'
         required: true
-        default: '40'
+        default: '4'
       num2:
         description: 'Second number'
         required: true
-        default: '60'
+        default: '6'
 
 jobs:
   add_numbers_job:
@@ -26,11 +26,13 @@ jobs:
           num1: ${{ github.event.inputs.num1 }}
           num2: ${{ github.event.inputs.num2 }}
 
-      - name: Manual write to GITHUB_OUTPUT
-        run: echo "manual_test=success" >> $GITHUB_OUTPUT
+      - name: Manual write to step output
+        id: manual_step
+        run: |
+          echo "manual_test=success" >> $GITHUB_STEP_OUTPUT
 
-      - name: Debug GITHUB_OUTPUT
-        run: cat $GITHUB_OUTPUT || echo "GITHUB_OUTPUT not found"
+      - name: Show manual output
+        run: echo "Manual test output: ${{ steps.manual_step.outputs.manual_test }}"
 
       - name: Show result
         run: echo "The addition is ${{ steps.step_add.outputs.total }}"
