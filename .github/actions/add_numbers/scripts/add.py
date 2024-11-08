@@ -9,7 +9,8 @@ def main():
         num1 = float(sys.argv[1])
         num2 = float(sys.argv[2])
         total = num1 + num2
-        print(f"::set-output name=total::{total}")
+        # Using echo to append to GITHUB_OUTPUT
+        print(f"echo 'total={total}' >> $GITHUB_OUTPUT")
     except ValueError:
         print("::error::Inputs must be valid numbers.")
         sys.exit(1)
