@@ -6,7 +6,7 @@ on:
       prompt:
         description: 'Question'
         required: true
-        default: 'What is the capital of Colombia?'
+        default: 'What is the capital of Risaralda?'
 
 jobs:
   ask_something_job:
@@ -19,7 +19,7 @@ jobs:
         id: step_ask
         uses: ./.github/actions/ask_something
         with:
-          question: ${{ github.event.inputs.prompt }}
+          prompt: ${{ github.event.inputs.prompt }}
 
       - name: Show answer
         run: echo "The answer is ${{ steps.lllm.outputs.answer }}"
