@@ -16,6 +16,3 @@ runs:
     - name: Execute addition script
       shell: bash
       run: python ${{ github.action_path }}/scripts/add.py ${{ inputs.num1 }} ${{ inputs.num2 }}
-    - name: Capture output
-      id: get_total
-      run: echo "total=$(cat /home/runner/work/_temp/_github_output)" >> $GITHUB_OUTPUT
