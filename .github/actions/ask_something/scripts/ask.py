@@ -1,30 +1,22 @@
 import sys
+import requests
 
-from gpt4all import GPT4All
+API_URL = "https://api-inference.huggingface.co/models/meta-llama/Llama-3.1-405B"
+headers = {"Authorization": "Bearer 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"}
 
 def main():
 
-    if len(sys.argv) != 2:
-        print("::error::One argument is required.")
-        sys.exit(1)
+    output = query({
+    "inputs": "What's the capital of Colombia?",
+    })
 
-    prompt = str(sys.argv[1])
+    print(output)
 
-    model = GPT4All(model_name="Phi-3-mini-4k-instruct.Q4_0.gguf")
+    sys.exit(0)
 
-    response = model.generate(
-        prompt=prompt,
-        max_tokens=280,
-        temp=0.2,         # Lower temperature for more deterministic output
-        top_k=5,                 # Narrow down the token selection
-        top_p=0.5,               # Focus on higher probability tokens
-        repeat_penalty=1.5,  # Discourage repetition
-        streaming=False,             # Stop at the end of the line
-    )
-
-    print(response)
-
-    sys.exit(0)    
+def query(payload):
+    response = requests.post(API_URL, headers=headers, json=payload)
+    return response.json()
 
 if __name__ == "__main__":
     main()

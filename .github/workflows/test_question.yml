@@ -19,7 +19,7 @@ jobs:
         id: step_ask
         uses: ./.github/actions/ask_something
         with:
-          question: ${{ github.event.inputs.question }}
+          question: ${{ github.event.inputs.prompt }}
 
       - name: Show answer
         run: echo "The answer is ${{ steps.lllm.outputs.answer }}"
