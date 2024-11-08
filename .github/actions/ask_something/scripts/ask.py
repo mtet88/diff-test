@@ -11,8 +11,9 @@ def main():
 
     model = GPT4All(model_name="Meta-Llama-3-8B-Instruct.Q4_0.gguf", model_path="../LLM/", allow_download=True)
 
+    prompt = string(sys.argv[1])
     response = model.generate(
-        prompt=sys.argv[1],
+        prompt=prompt,
         max_tokens=280,
         temp=0.2,         # Lower temperature for more deterministic output
         top_k=5,                 # Narrow down the token selection
