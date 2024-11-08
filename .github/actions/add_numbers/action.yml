@@ -15,4 +15,6 @@ runs:
   steps:
     - name: Execute addition script
       shell: bash
-      run: python ${{ github.action_path }}/scripts/add.py ${{ inputs.num1 }} ${{ inputs.num2 }}
+      run: |
+        total=$(python ${{ github.action_path }}/scripts/add.py ${{ inputs.num1 }} ${{ inputs.num2 }})
+        echo "total=$total" >> $GITHUB_OUTPUT

@@ -1,5 +1,4 @@
 import sys
-import os
 
 def main():
     if len(sys.argv) != 3:
@@ -11,17 +10,9 @@ def main():
         num2 = float(sys.argv[2])
         total = num1 + num2
 
-        # Check if GITHUB_OUTPUT is available
-        github_output_path = os.getenv('GITHUB_OUTPUT')
-        print(f"GITHUB_OUTPUT path: {github_output_path}")
-
-        if github_output_path:
-            # Write to GITHUB_OUTPUT if the path exists
-            with open(github_output_path, 'a') as github_output:
-                github_output.write(f"total={total}\n")
-        else:
-            print("::error::GITHUB_OUTPUT environment variable not found.")
-            sys.exit(1)
+        # Simply print the result - it will be captured by the shell
+        print(total)
+        sys.exit(0)
     except ValueError:
         print("::error::Inputs must be valid numbers.")
         sys.exit(1)
