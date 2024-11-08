@@ -1,5 +1,4 @@
 import sys
-import os
 
 from gpt4all import GPT4All
 
@@ -11,7 +10,7 @@ def main():
 
     model = GPT4All(model_name="Meta-Llama-3-8B-Instruct.Q4_0.gguf", model_path="../LLM/", allow_download=True)
 
-    prompt = string(sys.argv[1])
+    prompt = str(sys.argv[1])
     response = model.generate(
         prompt=prompt,
         max_tokens=280,
