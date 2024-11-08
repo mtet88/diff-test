@@ -1,5 +1,4 @@
 import sys
-import subprocess
 
 def main():
     if len(sys.argv) != 3:
@@ -10,8 +9,9 @@ def main():
         num1 = float(sys.argv[1])
         num2 = float(sys.argv[2])
         total = num1 + num2
-        # Write the output directly to the GITHUB_OUTPUT file
-        subprocess.run(f'echo "total={total}" >> $GITHUB_OUTPUT', shell=True)
+        # Write to GITHUB_OUTPUT for GitHub Actions to recognize it
+        with open('/home/runner/work/_temp/_github_output', 'a') as f:  # Standard GitHub Actions temp path
+            f.write(f"total={total}\n")
     except ValueError:
         print("::error::Inputs must be valid numbers.")
         sys.exit(1)
