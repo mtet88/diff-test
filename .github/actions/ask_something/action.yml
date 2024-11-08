@@ -4,6 +4,9 @@ inputs:
   prompt:
     description: 'Question'
     required: true
+  modelpath:
+    description: 'Path of the model'
+    required: true
 outputs:
   answer:
     description: 'Answer'
@@ -25,5 +28,5 @@ runs:
       id: lllm
       shell: bash
       run: |
-        answer=$(python "${{ github.action_path }}/scripts/ask.py" "${{ inputs.prompt }}")
+        answer=$(python "${{ github.action_path }}/scripts/ask.py" "${{ inputs.prompt }}" "${{ github.action_path }}/LLM")
         echo "answer=$answer" >> $GITHUB_OUTPUT
