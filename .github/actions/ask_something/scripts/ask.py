@@ -4,14 +4,13 @@ from gpt4all import GPT4All
 
 def main():
 
-    if len(sys.argv) != 2:
+    if len(sys.argv) != 3:
         print("::error::One argument is required.")
         sys.exit(1)
 
     prompt = str(sys.argv[1])
-    model_path = str(sys.argv[1])
 
-    model = GPT4All(model_name="Meta-Llama-3-8B-Instruct.Q4_0.gguf", model_path=model_path, allow_download=True)
+    model = GPT4All(model_name="Phi-3-mini-4k-instruct.Q4_0.gguf")
 
     response = model.generate(
         prompt=prompt,
