@@ -1,4 +1,5 @@
 import sys
+import os
 
 def main():
     if len(sys.argv) != 3:
@@ -9,9 +10,9 @@ def main():
         num1 = float(sys.argv[1])
         num2 = float(sys.argv[2])
         total = num1 + num2
-        # Write to GITHUB_OUTPUT for GitHub Actions to recognize it
-        with open('/home/runner/work/_temp/_github_output', 'a') as f:  # Standard GitHub Actions temp path
-            f.write(f"total={total}\n")
+        # Write the result directly to the GITHUB_OUTPUT environment file
+        with open(os.getenv('GITHUB_OUTPUT'), 'a') as github_output:
+            github_output.write(f"total={total}\n")
     except ValueError:
         print("::error::Inputs must be valid numbers.")
         sys.exit(1)
