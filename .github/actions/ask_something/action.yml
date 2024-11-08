@@ -4,9 +4,6 @@ inputs:
   prompt:
     description: 'Question'
     required: true
-  modelpath:
-    description: 'Path of the model'
-    required: true
 outputs:
   answer:
     description: 'Answer'
