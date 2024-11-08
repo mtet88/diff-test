@@ -1,0 +1,25 @@
+name: 'Test question'
+
+on:
+  workflow_dispatch:
+    inputs:
+      prompt:
+        description: 'Question'
+        required: true
+        default: 'What is the capital of Colombia?'
+
+jobs:
+  ask_something_job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Code checkout
+        uses: actions/checkout@v3
+
+      - name: Asking
+        id: step_ask
+        uses: ./.github/actions/ask_something
+        with:
+          question: ${{ github.event.inputs.question }}
+
+      - name: Show answer
+        run: echo "The answer is ${{ steps.lllm.outputs.answer }}"

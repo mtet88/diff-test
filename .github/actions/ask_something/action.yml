@@ -1,0 +1,30 @@
+name: 'Ask something'
+description: 'Ask something'
+inputs:
+  prompt:
+    description: 'Question'
+    required: true
+outputs:
+  answer:
+    description: 'Answer'
+    value: ${{ steps.lllm.outputs.answer }}
+runs:
+  using: 'composite'
+  steps:
+  - name: Set up Python
+      shell: bash
+      run: |
+        python_version=$(python -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')")
+        echo "Using Python $python_version"
+
+    - name: Install dependencies
+      shell: bash
+      run: |
+        pip install --upgrade pip
+        pip install -r "${{ github.action_path }}/requirements.txt"
+    - name: Ask local large language model
+      id: lllm
+      shell: bash
+      run: |
+        answer=$(python "${{ github.action_path }}/scripts/ask.py" "${{ inputs.prompt }}")
+        echo "answer=$answer" >> $GITHUB_OUTPUT
