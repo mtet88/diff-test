@@ -16,11 +16,6 @@ runs:
       run: |
         python_version=$(python -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')")
         echo "Using Python $python_version"
-    - name: Install dependencies
-      shell: bash
-      run: |
-        pip install --upgrade pip
-        pip install -r "${{ github.action_path }}/requirements.txt"
     - name: Ask local large language model
       id: lllm
       shell: bash
