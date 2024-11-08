@@ -10,9 +10,9 @@ def main():
         num1 = float(sys.argv[1])
         num2 = float(sys.argv[2])
         total = num1 + num2
-        # Write the result directly to the GITHUB_OUTPUT environment file
-        github_output_path = os.getenv('GITHUB_OUTPUT')
 
+        # Retrieve GITHUB_OUTPUT and write the result to it
+        github_output_path = os.getenv('GITHUB_OUTPUT')
         if github_output_path:
             with open(github_output_path, 'a') as github_output:
                 github_output.write(f"total={total}\n")
